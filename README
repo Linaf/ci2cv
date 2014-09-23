@@ -43,3 +43,7 @@ https://github.com/sambler/myblendercontrib/blob/master/runscript_pyconsole.py
 2. Open the following code in the text section of the code and then rename 'rotFinalBasicCheck' with the name of bvh file(renaming may be necessary as the time name(in which local time has unidentified characters in Blender)
 https://github.com/tesYolan/Load-BVH-To-Object-in-Blender
 3. Execute From python console -> console-> Run (Text Block Name)
+
+Again; Note there is a .blend file at https://github.com/tesYolan/Load-BVH-To-Object-in-Blender using the above steps one can 
+check the results; 
+
