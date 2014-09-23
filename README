@@ -1,20 +1,42 @@
-Welcome to the CSIRO Face Analysis SDK. Documentation for the SDK can
-be found in doc/documentation.html.
+Using the Handwritten-expression-tracker
 
-All code in this SDK is provided according to the license found in
-LICENSE.
+One can make the project using cmake, make with out making DWITH_GUI:bool=on option. 
 
-If you use the CSIRO Face Analysis SDK in any publications, we ask
-that you reference our works.
+How the Tracker Works?
 
-The face tracking component is based on the publication: 
-J. Saragih, S. Lucey and J. Cohn, "Deformable Model Fitting by
-Regularized Landmark Mean-Shift", IJCV 2011.
+1. After making it; One can execute ./handwritten-expression-tracker; from the folder of src/handwritten-expression-tracker/run_data_sets(this files are needed to make it run); 
 
-The expression transfer component is based on the publication:
-J. Saragih, S. Lucey and J. Cohn, "Real-time Avatar Animation from a
-Single Image", AFGR Workshop 2011.
+2. It can be run with no-arguments to use the camera as the source of video; Or using a file name for the video; 
+	In case of video Run; The code generates the video for that specified run; 
 
-If you use the SDK, we ask that you reference the following paper:
-M. Cox, J. Nuevo, J. Saragih and S. Lucey, "CSIRO Face Analysis SDK",
-AFGR 2013.
+3. If during the run the Landmarks locations don't accurately locate the landmarks one can press;
+R/r to reset the trackers till the landmark location on the face accurately locate location. When the one presses R/r the video and the landmarks are dropped and they start from that location on ward; 
+
+4. For visual illustrations the Eye open/closed; smile detected informations are displayed on the iimage; 
+
+5. When the video runs it's course or when the user presses esc; the program terminates by creating the BVH file by using the current LOCAL time and data and the video; 
+
+On The Contents of the BVH File; 
+
+The aforementioned EyeLeft/Right closed and smile are generated; With the additional handwritten calculations for the Eye Brows; Mouth; 
+
+Eye Brows; It's first assumed that any value greater than the difference of the two first frame from landmark location 19 and 37/ 24/44 are the max; Thus make the Eye Brows Most Expressed; But after successive run the values are recomputed such that the max from all the frame to the inital is considered to be the max and every correspoinding changes are in reflection of that. This means that if one makes the most the eye brow can extend then the all the corresponding animation will reflect that one have lower values than that. (The Same applies to Down movement; i.e if the smallest of all the movements is the highest for the brow down movement). 
+
+Mouth; Similar prinicples as the above but rather than difference between landmark points; It calculates the area hold by the 60-65 landmarks and applying the same principle tha jaw down(along with few upper and lower lip movement) can made to look more realistic by make high enough movements early on and then the corresponding movements follow the same principle; 
+
+
+The Smiles- I am using CascadeClassifier from the opencv library with a trained data (found somewhere in the internet (promising to be much trained)) thus the results are reflected based on 
+that data and the how the square on the mouth(the region on interest in which the cascade classifier is implmented) accurately holds the mouth location. There will be high false positives for people with mustache.)
+
+The Eyes- Again similar in principle to the above now using with the haarcascades for the eyes coming along with opencv; 
+
+Since the above two are implemented using object detection techniques on images; The quality of image(in camera) and the accurate illuimation of the faces is desired. 
+
+Now the BVH is created; Then What?
+
+One can load the generated bvh after importing it to blender to the Head pose using first
+1. Install the addon to blender; located at; 
+https://github.com/sambler/myblendercontrib/blob/master/runscript_pyconsole.py
+2. Open the following code in the text section of the code and then rename 'rotFinalBasicCheck' with the name of bvh file(renaming may be necessary as the time name(in which local time has unidentified characters in Blender)
+https://github.com/tesYolan/Load-BVH-To-Object-in-Blender
+3. Execute From python console -> console-> Run (Text Block Name)
