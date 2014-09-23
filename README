@@ -34,6 +34,9 @@ Since the above two are implemented using object detection techniques on images;
 
 Now the BVH is created; Then What?
 
+Using a similar file as the one found at the link proposed by (2) on can test the generated animation. And remember the
+giving the maximum movement for the mouth and brows early on for better result.
+
 One can load the generated bvh after importing it to blender to the Head pose using first
 1. Install the addon to blender; located at; 
 https://github.com/sambler/myblendercontrib/blob/master/runscript_pyconsole.py
