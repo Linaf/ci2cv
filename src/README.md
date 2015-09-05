@@ -29,7 +29,8 @@ Build
 -----
 ```sh
 $ cd catkin_ws/src/
-$ git clone 
+$ git clone https://github.com/Linaf/ci2cv
+## Edit CMakeLists.txt file inside ci2cvand replace CI2CV_LIBRARY and OpenCV_LIBS path by      		respective library paths of your system.
 $ cd ..
 $ catkin_make 
 $ source devel/setup.bash
