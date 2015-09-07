@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
-  usb_cam
+  #usb_cam
  # filesystem 
 #  system
 )
@@ -20,21 +20,26 @@ include_directories(
 )
 link_directories(${catkin_LIBRARY_DIRS})
 #set (EXTRA_LIBS ${EXTRA_LIBS} utils)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/home/lina/opencv-2.4.11/build/include -I/home/lina/setup/face-analysis-sdk-master/src/ -I/home/lina/catkin_ws/src/ci2cv/src/ -I/home/lina/setup/face-analysis-sdk-master/src/qt-gui/ -I/usr/include/qt4/")
-SET(CI2CV_LIBRARY avatarAnim  clmTracker utilities -L/home/lina/setup/face-analysis-sdk-master/build/lib/)
-SET(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui -L/home/lina/opencv-2.4.11/build/lib/)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I../../../opencv-2.4.11/build/include -I../../../setup/face-analysis-sdk-master/src/ -I/src/ -I../../../setup/face-analysis-sdk-master/src/qt-gui/ -I/usr/include/qt4/")
+SET(CI2CV_LIBRARY avatarAnim  clmTracker utilities -L../../../setup/face-analysis-sdk-master/build/lib/)
+SET(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui -L../../../opencv-2.4.11/build/lib/)
 SET(HEADERS_THREE src/utils/utils.cpp)
 SET(HEADERS_FOUR src/utils/utils.h)
 SET(HEADERS_ONE src/GroupPicture.cpp)
 SET(HEADERS_TWO src/GroupPicture.h)
 
 
+catkin_package(CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs)
 add_executable(ci2cv_node src/main.cpp ${HEADERS_ONE} ${HEADERS_TWO} ${HEADERS_THREE} ${HEADERS_FOUR})
 add_executable(ci2cv_publisher src/publisher.cpp ${HEADERS_ONE} ${HEADERS_TWO} ${HEADERS_THREE} ${HEADERS_FOUR})
 target_link_libraries(ci2cv_node
- ${catkin_LIBRARIES} ${LIBS} ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
+ ${catkin_LIBRARIES} ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
 target_link_libraries(ci2cv_publisher
- ${catkin_LIBRARIES} ${LIBS} ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
+ ${catkin_LIBRARIES}  ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
+#install(TARGETS ci2cv_node 
+ #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+ #install(TARGETS ci2cv_publisher
+ #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 ##${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY}
 #############
 ## Install ##
