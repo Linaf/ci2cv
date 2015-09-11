@@ -3,6 +3,7 @@
 #include <ros/ros.h>
 int main(int argc, char* argv[])
 {
+ros::init(argc, argv, "image_publisher");
 time_t rawtime;
 GroupPicture gp;
 try
@@ -35,4 +36,6 @@ catch(cv::Exception e)
 {
 std::cout<<"opencv"<<std::endl;
 }
+
+ros::spin();
 }

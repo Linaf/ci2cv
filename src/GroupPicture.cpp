@@ -1,48 +1,45 @@
 ﻿#include "GroupPicture.h"
-#include <ros/ros.h>
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include "/home/lina/catkin_ws/src/ci2cv/src/utils/utils.h"
-#include </home/lina/setup/ffmpeg-2.7.2/compat/aix/math.h>
+//#include "/home/lina/catkin_ws/src/ci2cv/src/utils/utils.h"
+#include "utils/utils.h"
+//#include </home/lina/setup/ffmpeg-2.7.2/compat/aix/math.h>
+#include <math.h>
 #include <boost/filesystem.hpp>
 #include "tracker/FaceTracker.hpp"
-#include <sstream> 
-
+#include <sstream>
 using namespace FACETRACKER;
 
-/*ros::NodeHandle nh;
-  image_transport::ImageTransport it(nh);
-  image_transport::Publisher pub;
-  sensor_msgs::ImagePtr msg;
-  */
+
+
 GroupPicture::GroupPicture()
-{
-tracker = FACETRACKER::LoadFaceTracker();
-tracker_params= FACETRACKER::LoadFaceTrackerParams();
- Utils::Init();
-//pub= it.advertise("ci2cv_node/output_video", 1);
-//ros::init();
-}
+            : it_(nh_)
+             {
+				tracker = FACETRACKER::LoadFaceTracker();
+				tracker_params= FACETRACKER::LoadFaceTrackerParams();
+				Utils::Init();
+                image_sub_ = it_.subscribe("/usb_cam/image_raw", 1,
+                &GroupPicture::imageCb, this);
+				pub_= it_.advertise("ci2cv_node/output_video", 1);
+
+			}
 GroupPicture::~GroupPicture()
 {
-delete tracker;
-tracker=0;
-delete tracker_params;
-tracker_params=0;
+     delete tracker;
+     tracker=0;
+     delete tracker_params;
+     tracker_params=0;
 }
 void GroupPicture::setImage(const std::string &imgLoc)
 {
 image= cv::imread(imgLoc,CV_LOAD_IMAGE_GRAYSCALE);
 }
+
 void GroupPicture::processVideo()
 {
+   // image=GroupPicture::imageCb();
     cap >> image;
 
     faces = Utils::detectFaces(image);
-   /* for (int i = 0; i < (int)faces.size(); i++){
-         images[i]= cv::Mat(images(faces[i]).clone,faces[i]);
-        }
-*/
+
     if( !vidLoc.empty())
     {
      for (int i = 0; i < (int)faces.size(); i++){
@@ -50,7 +47,7 @@ void GroupPicture::processVideo()
     writer.write(image);
           }
     }
-    // faces = Utils::detectFaces(image);
+
     cv::Point_<double> initialRun48;
     initialRun48.x=-1;
     cv::Point_<double> initialRun54;
@@ -60,7 +57,6 @@ void GroupPicture::processVideo()
     runningMax48.x=0;
     cv::Point_<double> runningMax54;
     runningMax54.x=0;
-   // cv::Mat images[];
 
     cv::Point_<double> point6;
     cv::Point_<double> point10;
@@ -164,8 +160,8 @@ void GroupPicture::processVideo()
                          cv::Point point;
                          point.x= image.size().width/2;
                          point.y= image.size().height/2;
-                    /*     msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", image).toImageMsg();
-             pub.publish(msg);*/
+             msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", image).toImageMsg();
+             pub_.publish(msg);
 			 cv::waitKey(1);
                          if(i==60)
                          {
@@ -228,7 +224,6 @@ void GroupPicture::processVideo()
                  }
 
 
-               //   }
 
 
                          }
@@ -241,15 +236,9 @@ void GroupPicture::processVideo()
 }
     delete tracker;
     tracker=0;
-            delete tracker_params;
+    delete tracker_params;
     tracker_params=0;
-   /* ros::Rate loop_rate(5);
-     while (nh.ok()) {
-      pub.publish(msg);
-      ros::spinOnce();
-      loop_rate.sleep();
-     }
-*/
+
 }
 void GroupPicture::setVideoSource()
 {
@@ -337,3 +326,19 @@ void GroupPicture::setVideoWriteLocation(const std::string &vidLoc)
 
 
 }
+
+void GroupPicture::imageCb(const sensor_msgs::ImageConstPtr& msg)
+{
+      cv_bridge::CvImagePtr cv_ptr;
+    try
+     {
+        cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+      }
+     catch (cv_bridge::Exception& e)
+     {
+       ROS_ERROR("cv_bridge exception: %s", e.what());
+        return;
+       }
+ 
+}
+

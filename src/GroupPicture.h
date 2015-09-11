@@ -12,12 +12,21 @@
 #include <fstream>
 #include <iostream>
 #include <utils/helpers.hpp>
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <sensor_msgs/image_encodings.h>
+#include <cv_bridge/cv_bridge.h>
 
 /**
 This class is created inorder to allow ci2cv face tracker with group picture detection.
 */
 class GroupPicture
 {
+ros::NodeHandle nh_;
+image_transport::ImageTransport it_;
+image_transport::Subscriber image_sub_;
+image_transport::Publisher pub_;
+sensor_msgs::ImagePtr msg;
 public:
 GroupPicture();
 void setImage(const std::string &imgLoc);
@@ -28,6 +37,7 @@ void processVideo();
 void paintOnPicture(cv::Mat &image, cv::Point_<double> point);
 void paintOnPicture(cv::Mat &image, cv::Point_<double> point, int);
 void setVideoSource();
+void imageCb(const sensor_msgs::ImageConstPtr& msg);
 void setVideoSource(const std::string &videoLoc);
 void setVideoWriteLocation(const std::string &vidLoc);
 void generateLength(int frameNumber);
@@ -44,9 +54,9 @@ std::vector<cv::Point_<double> > shape;
 std::vector<cv::Point3_<double> > shape3D;
 std::vector<FACETRACKER::Pose> poseVec;
 cv::Rect lEye;
-      cv::Rect rEye;
-      cv::Rect mouth;
-      int result;
+cv::Rect rEye;
+cv::Rect mouth;
+int result;
 cv::VideoCapture cap;
 cv::Mat image;
 const cv::Mat imageadd;

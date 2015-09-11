@@ -20,6 +20,7 @@ Prerequisites
 
 ######FFMPEG
 >  version 1.0.0 or above.
+> https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 
 ######QT
 > version 4.7 or above 
@@ -30,7 +31,7 @@ Build
 ```sh
 $ cd catkin_ws/src/
 $ git clone https://github.com/Linaf/ci2cv
-## Edit CMakeLists.txt file inside ci2cvand replace CI2CV_LIBRARY and OpenCV_LIBS path by      		respective library paths of your system.
+## Edit CMakeLists.txt file inside ci2cv and replace CI2CV_LIBRARY and OpenCV_LIBS path by      		respective library paths of your system.
 $ cd ..
 $ catkin_make 
 $ source devel/setup.bash
@@ -38,7 +39,12 @@ $ source devel/setup.bash
 
 Run group_picture_tracker
 -----------
-Run group_picture_tracker to track multiple faces simultaneously via ci2cv
+Run ci2cv_node to track multiple faces simultaneously via ci2cv
 ```sh
-$ rosrun ci2cv group_picture_tracker
+$ roscore
+$ rosrun usb_cam usb_cam_node
+$ rosrun ci2cv ci2cv_node
+
+This node tracks multiple faces simultaneously and publishes the video to a rostopic named "/ci2cv_node/output_video"
+
 

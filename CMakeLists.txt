@@ -5,12 +5,12 @@ project(ci2cv)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
-  roscpp
   sensor_msgs
+  cv_bridge
+  roscpp
   std_msgs
-  #usb_cam
+  image_transport
+  usb_cam
  # filesystem 
 #  system
 )
@@ -28,14 +28,10 @@ SET(HEADERS_FOUR src/utils/utils.h)
 SET(HEADERS_ONE src/GroupPicture.cpp)
 SET(HEADERS_TWO src/GroupPicture.h)
 
-
-catkin_package(CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs)
+catkin_package(CATKIN_DEPENDS sensor_msgs cv_bridge roscpp std_msgs image_transport usb_cam)
 add_executable(ci2cv_node src/main.cpp ${HEADERS_ONE} ${HEADERS_TWO} ${HEADERS_THREE} ${HEADERS_FOUR})
-add_executable(ci2cv_publisher src/publisher.cpp ${HEADERS_ONE} ${HEADERS_TWO} ${HEADERS_THREE} ${HEADERS_FOUR})
 target_link_libraries(ci2cv_node
  ${catkin_LIBRARIES} ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
-target_link_libraries(ci2cv_publisher
- ${catkin_LIBRARIES}  ${OpenCV_LIBS} ${CI2CV_LIBRARY} )
 #install(TARGETS ci2cv_node 
  #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
  #install(TARGETS ci2cv_publisher

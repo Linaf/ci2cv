@@ -2,14 +2,15 @@
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
  #include <cv_bridge/cv_bridge.h>
+ #include <sstream>
 
 int main(int argc, char** argv)
    {
     if(argv[1] == NULL) return 1;
          ros::init(argc, argv, "image_publisher");
-        ros::NodeHandle nh;
+         ros::NodeHandle nh;
          image_transport::ImageTransport it(nh);
-         image_transport::Publisher pub = it.advertise("camera/image", 1);
+         image_transport::Publisher pub = it.advertise("/usb_cam/image_raw", 1);
 
          // Convert the passed as command line parameter index for the video device to an integer
        std::istringstream video_sourceCmd(argv[1]);
