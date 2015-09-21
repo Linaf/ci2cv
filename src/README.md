@@ -8,6 +8,8 @@ Prerequisites
 ###### ci2cv
 > CSIRO Face Analysis SDK contains a number of useful components that can extract and utilise the geometry of the face found in video. 
 > https://github.com/iCogLabs/face-analysis-sdk
+> use the following link for installation instruction
+ https://github.com/iCogLabs/face-analysis-sdk/blob/master/doc/documentation.html
 
 
 ###### cmake
